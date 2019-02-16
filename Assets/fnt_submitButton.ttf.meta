@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 6483d89c6a2f2ba4a92ed9dadb1e37b7
+timeCreated: 1550353298
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: 3x3crush
+  fontNames:
+  - 3x3crush
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
