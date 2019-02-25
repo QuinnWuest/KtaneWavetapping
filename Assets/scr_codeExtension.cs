@@ -34,7 +34,7 @@ public static class scr_codeExtension {
 	/// <param name="logSep">Log sep.</param>
 	/// <param name="rowLen">Row length.</param>
 	/// <param name="colLen">Col length.</param>
-	public static string JoinGrid<T>(this IEnumerable<T> toJoin, string logSep = " ", int rowLen = 1, int colLen = 1) {
+	public static string Join<T>(this IEnumerable<T> toJoin, string logSep = " ", int rowLen = 1, int colLen = 1) {
 		var fullLog = new string[rowLen];
 
 		for (int i = 0; i < fullLog.Length; i++) {
@@ -225,7 +225,7 @@ public static class scr_codeExtension {
     /// <param name="matrix"></param>
     /// <param name="columnNumber"></param>
     /// <returns></returns>
-    public static T[] GetColumn<T>(this T[,] nowArray, int columnNumber) {
+    public static T[] GetCol<T>(this T[,] nowArray, int columnNumber) {
         return Enumerable.Range(0, nowArray.GetLength(0)).Select(x => nowArray[x, columnNumber]).ToArray();
     }
 

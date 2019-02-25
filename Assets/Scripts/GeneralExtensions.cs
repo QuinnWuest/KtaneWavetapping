@@ -213,8 +213,7 @@ public static class GeneralExtensions
         return new Color(red / 255f, green / 255f, blue / 255f, alpha / 255f);
     }
 
-    public static Color Color(this string colorString)
-    {
+    public static Color Color(this string colorString) {
         Color color;
         if (ColorUtility.TryParseHtmlString(colorString, out color)) return color;
         ColorUtility.TryParseHtmlString("#" + colorString, out color);

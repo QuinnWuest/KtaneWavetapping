@@ -13,9 +13,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: Wavetapping
   title: Wavetapping
-  description: 'Manual HTML: (Link soon)
-
-    Manual PDF: (Link soon)'
+  description: "Enter a pattern into an 11x11 grid based on its color. With over 150
+    patterns and 16 unique colors and solving methods, this module is a lot to take
+    in. Trust me.\r\n\r\nEstimated Difficulty: 6/10 (defuser and expert)\r\n\r\nThis
+    module is a reference to the song \"Wavetapper\" by Frums, and its background
+    animation. I highly suggest you check it out, since it's easily accessible on
+    YouTube. And who knows, you might find some references in the manual you may not
+    have noticed before watching it.\n\nOriginal idea made by: Lumbud84\n\nmoduleID:
+    Wavetapping\n\nManual HTML: (Link soon)\nManual PDF: (Link soon)"
   version: 1.0
   outputFolder: Build
-  previewImage: {fileID: 0}
+  previewImage: {fileID: 2800000, guid: 94898833b346f9f48bfc2e6a77edc5ca, type: 3}
