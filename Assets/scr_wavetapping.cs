@@ -104,7 +104,7 @@ public class scr_wavetapping : MonoBehaviour {
                 return false;
             };
 
-            ModuleButtons[i].OnInteractEnded += delegate () {
+            ModuleButtons[i].OnInteractEnded += delegate() {
                 dragging = false;
             };
 
