@@ -67,12 +67,28 @@ public static class scr_codeExtension {
 		return toShuff;
 	}
 
-	/// <summary>
-	/// Determines wether the specified int is even.
-	/// </summary>
-	/// <returns><c>true</c> if is even the specified numCheck; otherwise, <c>false</c>.</returns>
-	/// <param name="numCheck">Number check.</param>
-	public static bool IsEven(this int numCheck) {
+    /// <summary>
+    /// Returns a random element from the specified collection.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="source"></param>
+    /// <returns></returns>
+    public static T PickRandom<T>(this IEnumerable<T> source) {
+        var list = (source as IList<T>) ?? source.ToArray();
+
+        if (list.Count == 0) {
+            throw new InvalidOperationException("Cannot pick an element from an empty set.");
+        }
+
+        return list[Random.Range(0, list.Count)];
+    }
+
+    /// <summary>
+    /// Determines wether the specified int is even.
+    /// </summary>
+    /// <returns><c>true</c> if is even the specified numCheck; otherwise, <c>false</c>.</returns>
+    /// <param name="numCheck">Number check.</param>
+    public static bool IsEven(this int numCheck) {
 		return (numCheck % 2 == 0);
 	}
 

@@ -43,6 +43,7 @@ public class scr_wavetapping : MonoBehaviour {
     int nowStage;
     string nowPattern = "";
     readonly string[] correctPatterns = new string[3];
+    readonly bool[] clearedStage = new bool[3];
     string serialNumber = "";
     IEnumerable<int> serialDigits;
 
@@ -130,11 +131,20 @@ public class scr_wavetapping : MonoBehaviour {
     }
 
     void StartStage() {
-        for (int i = 0; i < ModuleButtons.Length; i++) {
-            ModuleButtons[i].GetComponent<Renderer>().material.color = patternColors[0, stageColors[nowStage]];
+        if (clearedStage[nowStage]) {
+            for (int i = 0; i < ModuleButtons.Length; i++) {
+                nowPattern = nowPattern.Remove(i, 1);
+                nowPattern = nowPattern.Insert(i, correctPatterns[nowStage][i].Equals('O') ? "O" : "X");
+                ModuleButtons[i].GetComponent<Renderer>().material.color = patternColors[nowPattern[i].Equals('O').ToInt(), stageColors[nowStage]];
+            }
+        } else {
+            for (int i = 0; i < ModuleButtons.Length; i++) {
+                ModuleButtons[i].GetComponent<Renderer>().material.color = patternColors[0, stageColors[nowStage]];
+            }
+
+            nowPattern = Enumerable.Repeat("X", 121).Join("");
         }
 
-        nowPattern = Enumerable.Repeat("X", 121).Join("");
         DisplayPixel.transform.localPosition = new Vector3(0.0456f + (0.01f * (stageColors[nowStage] % 4)), 0.0165f, -0.0103f - (0.01f * (stageColors[nowStage] / 4)));
     }
 
@@ -192,7 +202,7 @@ public class scr_wavetapping : MonoBehaviour {
 
             if (i != flashTimes - 2) {
                 if (i.IsEven()) {
-                    yield return new WaitForSeconds(0.35f);
+                    yield return new WaitForSeconds(0.2f);
                 } else {
                     yield return new WaitForSeconds(0.09f);
                 }
@@ -210,6 +220,7 @@ public class scr_wavetapping : MonoBehaviour {
             var intPattern = ReturnPattern(nowColor, i);
             Debug.LogFormat(@"[Wavetapping #{0}] Correct pattern for stage {1} is: {2}", moduleId, i + 1, intPattern + 1);
             correctPatterns[i] = patterns[nowColor][intPattern];
+            LogPatterns(correctPatterns[i]);
         }
     }
 
@@ -359,6 +370,14 @@ public class scr_wavetapping : MonoBehaviour {
         return (char.IsDigit(nowChar)) ? int.Parse(nowChar.ToString()) : (nowChar - 'A') + 1;
     }
 
+    void LogPatterns(string pattern) {
+        pattern = pattern.Replace('O', '0');
+
+        for (int i = 0; i < 11; i++) {
+            Debug.LogFormat(@"[Wavetapping #{0}] {1}", moduleId, pattern.Skip(11 * i).Take(11).Join(""));
+        }
+    }
+
     void OnSubmitPress() {
         BombAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
         ModuleSelect.AddInteractionPunch(0.5f);
@@ -370,6 +389,7 @@ public class scr_wavetapping : MonoBehaviour {
         var prevStage = nowStage;
 
         if (nowPattern.Equals(correctPatterns[nowStage++])) {
+            clearedStage[prevStage] = true;
             Debug.LogFormat(@"[Wavetapping #{0}] Pattern was correct!", moduleId);
 
             if (nowStage >= 3) {
@@ -380,7 +400,16 @@ public class scr_wavetapping : MonoBehaviour {
             }
         } else {
             BombModule.HandleStrike();
-            Debug.LogFormat(@"[Wavetapping #{0}] Incorrect pattern. Resetting module.", moduleId);
+            var findPattern = Array.IndexOf(patterns[colorNames[stageColors[prevStage]]], nowPattern);
+
+            if (findPattern == -1) {
+                Debug.LogFormat(@"[Wavetapping #{0}] Pattern doesn't match with any other pattern of that color.", moduleId);
+            } else {
+                Debug.LogFormat(@"[Wavetapping #{0}] You submited pattern {1} when the correct pattern was {2}.", moduleId, findPattern + 1, Array.IndexOf(patterns[colorNames[stageColors[prevStage]]], correctPatterns[prevStage]) + 1);
+            }
+
+            Debug.LogFormat(@"[Wavetapping #{0}] Submitted pattern:", moduleId);
+            LogPatterns(nowPattern);
             nowStage = 0;
         }
 
