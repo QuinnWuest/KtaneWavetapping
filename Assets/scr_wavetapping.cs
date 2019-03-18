@@ -42,6 +42,7 @@ public class scr_wavetapping : MonoBehaviour {
     int[] stageColors = new int[3];
     int nowStage;
     string nowPattern = "";
+    readonly int[] intPatterns = new int[3];
     readonly string[] correctPatterns = new string[3];
     readonly bool[] clearedStage = new bool[3];
     string serialNumber = "";
@@ -217,9 +218,9 @@ public class scr_wavetapping : MonoBehaviour {
     void GetCorrects() {
         for (int i = 0; i < 3; i++) {
             var nowColor = colorNames[stageColors[i]];
-            var intPattern = ReturnPattern(nowColor, i);
-            Debug.LogFormat(@"[Wavetapping #{0}] Correct pattern for stage {1} is: {2}", moduleId, i + 1, intPattern + 1);
-            correctPatterns[i] = patterns[nowColor][intPattern];
+            intPatterns[i] = ReturnPattern(nowColor, i);
+            Debug.LogFormat(@"[Wavetapping #{0}] Correct pattern for stage {1} is: {2}", moduleId, i + 1, intPatterns[i] + 1);
+            correctPatterns[i] = patterns[nowColor][intPatterns[i]];
             LogPatterns(correctPatterns[i]);
         }
     }

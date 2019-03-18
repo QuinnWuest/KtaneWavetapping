@@ -73,7 +73,7 @@ public static class scr_codeExtension {
     /// <typeparam name="T"></typeparam>
     /// <param name="source"></param>
     /// <returns></returns>
-    public static T PickRandom<T>(this IEnumerable<T> source) {
+    public static T Pick<T>(this IEnumerable<T> source) {
         var list = (source as IList<T>) ?? source.ToArray();
 
         if (list.Count == 0) {
@@ -115,11 +115,11 @@ public static class scr_codeExtension {
 	/// Slices the specified element.
 	/// </summary>
 	/// <param name="toSlice">To slice.</param>
-	/// <param name="startFrom">Start from.</param>
+	/// <param name="skipCount">Start from.</param>
 	/// <param name="itemCount">Item count.</param>
 	/// <typeparam name="T">The 1st type parameter.</typeparam>
-	public static IEnumerable<T> Slice<T>(this IEnumerable<T> toSlice, int startFrom, int itemCount) {
-		return toSlice.Skip(startFrom).Take(itemCount);
+	public static IEnumerable<T> Slice<T>(this IEnumerable<T> toSlice, int skipCount, int itemCount) {
+		return toSlice.Skip(skipCount).Take(itemCount);
 	}
 
 	/// <summary>
@@ -190,11 +190,7 @@ public static class scr_codeExtension {
 		T[,] setArrayTD = new T[rowLen, colLen];
 
 		for (int i = 0; i < (rowLen * colLen); i++) {
-			if (i < toArrayTD.Length) {
-				setArrayTD[i / colLen, i % colLen] = toArrayTD[i];
-			} else {
-				setArrayTD[i / colLen, i % colLen] = default(T);
-			}
+			setArrayTD[i / colLen, i % colLen] = (i < toArrayTD.Length) ? toArrayTD[i] : default(T);
 		}
 
 		return setArrayTD;
