@@ -43,7 +43,7 @@ namespace EdgeworkConfigurator
 
                 SerializedProperty widgetListProperty = serializedObject.FindProperty("Widgets");
                 EditorGUI.indentLevel++;
-                for (int i = 0; i < widgetListProperty.arraySize; i++)
+                for (var i = 0; i < widgetListProperty.arraySize; i++)
                 {
                     DrawWidget(widgetListProperty, i);
                     EditorGUILayout.Space();

@@ -71,7 +71,7 @@ public class scr_wavetapping : MonoBehaviour {
         Debug.LogFormat(@"[Wavetapping #{0}] Possible colors are: {1}", moduleId, usedColors.Select(x => colorNames[x]).Join(", "));
         Debug.LogFormat(@"[Wavetapping #{0}] Stage colors are: {1}", moduleId, stageColors.Select(x => colorNames[x]).Join(", "));
 
-        for (int i = 0; i < ColorDisplays.Length; i++) {
+        for (var i = 0; i < ColorDisplays.Length; i++) {
             ColorDisplays[i].material.color = (usedColors.Contains(i)) ? "#DDDDDD".Color() : patternColors[0, i];
         }
 
@@ -81,7 +81,7 @@ public class scr_wavetapping : MonoBehaviour {
         if ("SRFMU".Count(x => BombInfo.GetSerialNumberLetters().Distinct().Contains(x)) >= 3) {
             Debug.LogFormat(@"[Wavetapping #{0}] Rotating the patterns 180 degrees.", moduleId);
 
-            for (int i = 0; i < colorNames.Length; i++) {
+            for (var i = 0; i < colorNames.Length; i++) {
                 patterns[colorNames[i]] = patterns[colorNames[i]].Select(x => x.Reverse()).ToArray();
             }
         }
@@ -96,8 +96,8 @@ public class scr_wavetapping : MonoBehaviour {
             return false;
         };
 
-        for (int i = 0; i < ModuleButtons.Length; i++) {
-            int j = i;
+        for (var i = 0; i < ModuleButtons.Length; i++) {
+            var j = i;
 
             ModuleButtons[i].OnInteract += delegate() {
                 OnButtonPress(j);
@@ -122,8 +122,8 @@ public class scr_wavetapping : MonoBehaviour {
         var input = pattern.ToStringArray().ToArray2D(11, 11);
         var output = "";
 
-        for (int i = 0; i < input.GetLength(1); i++) {
-            for (int j = 0; j < input.GetLength(0); j++) {
+        for (var i = 0; i < input.GetLength(1); i++) {
+            for (var j = 0; j < input.GetLength(0); j++) {
                 output += input[j, i];
             }
         }
@@ -133,13 +133,13 @@ public class scr_wavetapping : MonoBehaviour {
 
     void StartStage() {
         if (clearedStage[nowStage]) {
-            for (int i = 0; i < ModuleButtons.Length; i++) {
+            for (var i = 0; i < ModuleButtons.Length; i++) {
                 nowPattern = nowPattern.Remove(i, 1);
                 nowPattern = nowPattern.Insert(i, correctPatterns[nowStage][i].Equals('O') ? "O" : "X");
                 ModuleButtons[i].GetComponent<Renderer>().material.color = patternColors[nowPattern[i].Equals('O').ToInt(), stageColors[nowStage]];
             }
         } else {
-            for (int i = 0; i < ModuleButtons.Length; i++) {
+            for (var i = 0; i < ModuleButtons.Length; i++) {
                 ModuleButtons[i].GetComponent<Renderer>().material.color = patternColors[0, stageColors[nowStage]];
             }
 
@@ -164,10 +164,10 @@ public class scr_wavetapping : MonoBehaviour {
     }
 
     IEnumerator StageBlink(string shape, int stage) {
-        for (int i = 0; i < 5; i++) {
+        for (var i = 0; i < 5; i++) {
             var nowShape = (i.IsEven()) ? shape : Enumerable.Repeat("X", 121).Join("");
 
-            for (int j = 0; j < ModuleButtons.Length; j++) {
+            for (var j = 0; j < ModuleButtons.Length; j++) {
                 ModuleButtons[j].GetComponent<Renderer>().material.color = patternColors[(nowShape[j].Equals('O')).ToInt(), stageColors[stage]];
             }
 
@@ -182,7 +182,7 @@ public class scr_wavetapping : MonoBehaviour {
         var endPatterns = patterns["Purple"].Slice(11, 2).ToArray();
         var flashTimes = (9 * 2) + 2;
 
-        for (int i = 0; i < flashTimes; i++) {
+        for (var i = 0; i < flashTimes; i++) {
             var shape = "";
 
             if (i.IsEven()) {
@@ -197,7 +197,7 @@ public class scr_wavetapping : MonoBehaviour {
                 shape = Enumerable.Repeat("X", 121).Join("");
             }
 
-            for (int j = 0; j < ModuleButtons.Length; j++) {
+            for (var j = 0; j < ModuleButtons.Length; j++) {
                 ModuleButtons[j].GetComponent<Renderer>().material.color = patternColors[(shape[j].Equals('O')).ToInt(), stageColors[nowStage]];
             }
 
@@ -216,7 +216,7 @@ public class scr_wavetapping : MonoBehaviour {
     }
 
     void GetCorrects() {
-        for (int i = 0; i < 3; i++) {
+        for (var i = 0; i < 3; i++) {
             var nowColor = colorNames[stageColors[i]];
             intPatterns[i] = ReturnPattern(nowColor, i);
             Debug.LogFormat(@"[Wavetapping #{0}] Correct pattern for stage {1} is: {2}", moduleId, i + 1, intPatterns[i] + 1);
@@ -254,7 +254,7 @@ public class scr_wavetapping : MonoBehaviour {
                 if (countD == countAA) {
                     return (serialDigits.First().IsEven()).ToInt();
                 } else {
-                    if (stage != 0 && patterns[colorNames[stage - 1]].Length <= 3) {
+                    if (stage != 0 && patterns[colorNames[stageColors[stage - 1]]].Length <= 3) {
                         return (countD > countAA).ToInt();
                     }
 
@@ -374,7 +374,7 @@ public class scr_wavetapping : MonoBehaviour {
     void LogPatterns(string pattern) {
         pattern = pattern.Replace('O', '0');
 
-        for (int i = 0; i < 11; i++) {
+        for (var i = 0; i < 11; i++) {
             Debug.LogFormat(@"[Wavetapping #{0}] {1}", moduleId, pattern.Skip(11 * i).Take(11).Join(""));
         }
     }
@@ -435,9 +435,9 @@ public class scr_wavetapping : MonoBehaviour {
         nowPattern = nowPattern.Insert(buttonPressed, addStr);
     }
 
-    #pragma warning disable 414
+#pragma warning disable 414
     private readonly string TwitchHelpMessage = @"!{0} press A1 B39 C123... (column [A to I] and row [1 to 9] to press [not counting the edges so A1 will be considered as B2 on the grid] [you can input multiple rows in the same column]) | !{0} submit/sub/s (submits current pattern)";
-    #pragma warning restore 414
+#pragma warning restore 414
 
     KMSelectable[] ProcessTwitchCommand(string command) {
         command = command.ToLowerInvariant().Trim();
@@ -448,11 +448,11 @@ public class scr_wavetapping : MonoBehaviour {
             var presses = command.Split(new[] { ',', ' ', '|', '&' }, StringSplitOptions.RemoveEmptyEntries);
             var pressList = new List<KMSelectable>();
 
-            for (int i = 0; i < presses.Length; i++) {
+            for (var i = 0; i < presses.Length; i++) {
                 if (Regex.IsMatch(presses[i], @"^[a-i][1-9]{1,9}$")) {
                     var setCol = presses[i][0] - 'a' + 1;
 
-                    for (int j = 0; j < presses[i].Length - 1; j++) {
+                    for (var j = 0; j < presses[i].Length - 1; j++) {
                         var setPress = setCol + (11 * (presses[i][j + 1] - '1' + 1));
                         pressList.Add(ModuleButtons[setPress]);
                     }

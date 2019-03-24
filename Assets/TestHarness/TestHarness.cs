@@ -256,7 +256,7 @@ public class FakeBombInfo : MonoBehaviour
 		if (config == null) 
         {
             const int numWidgets = 5;
-            for (int a = 0; a < numWidgets; a++) 
+            for (var a = 0; a < numWidgets; a++) 
             {
                 int r = Random.Range(0, 3);
 	            if (r == 0)  widgets.Add(PortWidget.CreateComponent(PortWidget));
@@ -281,7 +281,7 @@ public class FakeBombInfo : MonoBehaviour
                     switch (widgetConfig.Type)
                     {
                         case WidgetType.BATTERY:
-                            for (int i = 0; i < widgetConfig.Count; i++)
+                            for (var i = 0; i < widgetConfig.Count; i++)
                             {
                                 if (widgetConfig.BatteryType == BatteryType.CUSTOM)
                                 {
@@ -308,7 +308,7 @@ public class FakeBombInfo : MonoBehaviour
                             }
                             break;
                         case WidgetType.PORT_PLATE:
-                            for (int i = 0; i < widgetConfig.Count; i++)
+                            for (var i = 0; i < widgetConfig.Count; i++)
                             {
                                 List<string> ports = new List<string>();
                                 if (widgetConfig.PortPlateType == PortPlateType.CUSTOM)
@@ -372,13 +372,13 @@ public class FakeBombInfo : MonoBehaviour
                             }
                             break;
 						case WidgetType.TWOFACTOR:
-							for (int i = 0; i < widgetConfig.Count; i++)
+							for (var i = 0; i < widgetConfig.Count; i++)
 							{
 								widgets.Add(TwoFactorWidget.CreateComponent(TwoFactorWidget, config.TwoFactorResetTime));
 							}
 							break;
                         case WidgetType.CUSTOM:
-                            for (int i = 0; i < widgetConfig.Count; i++)
+                            for (var i = 0; i < widgetConfig.Count; i++)
                             {
                                 widgets.Add(CustomWidget.CreateComponent(CustomWidget, widgetConfig.CustomQueryKey, widgetConfig.CustomData));
                             }
@@ -392,7 +392,7 @@ public class FakeBombInfo : MonoBehaviour
             }
             foreach (THWidget randIndWidget in RandomWidgets)
             {
-                for (int i = 0; i < randIndWidget.Count; i++)
+                for (var i = 0; i < randIndWidget.Count; i++)
                 {
                     int r = Random.Range(0, 3);
                     if (r == 0) widgets.Add(BatteryWidget.CreateComponent(BatteryWidget));
@@ -793,7 +793,7 @@ public class TestHarness : MonoBehaviour
 			wallCube.transform.SetParent(wall, false);
 			DestroyImmediate(wallCube.GetComponent<BoxCollider>());
 
-			for (int bombFace = 0; bombFace < 2; bombFace++)
+			for (var bombFace = 0; bombFace < 2; bombFace++)
 			{
 				Transform bombFaceTransform = new GameObject().transform;
 				KMBombFace kmbombFace = bombFaceTransform.gameObject.AddComponent<KMBombFace>();
@@ -863,9 +863,9 @@ public class TestHarness : MonoBehaviour
 			dupebomb.transform.name = string.Format("{0}x{0} Square Bomb", square);
 		}
 
-		for (int i = 0; i < anchors.Count; i++)
+		for (var i = 0; i < anchors.Count; i++)
 			anchors[i] = anchors[i].OrderBy(x => Random.value).ToList();
-		for (int i = 0; i < timerAnchors.Count; i++)
+		for (var i = 0; i < timerAnchors.Count; i++)
 			timerAnchors[i] = timerAnchors[i].OrderBy(x => Random.value).ToList();
 
 		int timerFace = Random.Range(0, timerAnchors.Count);
@@ -940,7 +940,7 @@ public class TestHarness : MonoBehaviour
 		widgets = widgets.Where(x => x.GetType() != typeof(SerialNumber)).OrderBy(x => Random.value).ToList();
 		widgets.Insert(0, sn);
 
-		for (int i = 0; i < widgets.Count; i++)
+		for (var i = 0; i < widgets.Count; i++)
 		{
 			//do things with each widget in the pool.  (If one widget won't fit on the bomb, discard it.)
 			Widget widget = widgets[i];
@@ -1012,7 +1012,7 @@ public class TestHarness : MonoBehaviour
         fakeInfo.needyModules = needyModules.ToList();
         currentSelectable.Children = new TestSelectable[modules.Count + needyModules.Count];
         currentSelectable.ChildRowLength = currentSelectable.Children.Length;
-        for (int i = 0; i < modules.Count; i++)
+        for (var i = 0; i < modules.Count; i++)
         {
             KMBombModule mod = modules[i];
 	        StatusLight statuslight = CreateStatusLight(mod.transform);
@@ -1048,7 +1048,7 @@ public class TestHarness : MonoBehaviour
             };
         }
 
-        for (int i = 0; i < needyModules.Count; i++)
+        for (var i = 0; i < needyModules.Count; i++)
         {
 	        KMNeedyModule needyModule = needyModules[i];
 
@@ -1480,7 +1480,7 @@ public class TestHarness : MonoBehaviour
 			TestSelectable testSelectable = selectable.gameObject.GetComponent<TestSelectable>();
             testSelectable.Parent = selectable.Parent ? selectable.Parent.GetComponent<TestSelectable>() : null;
             testSelectable.Children = new TestSelectable[selectable.Children.Length];
-            for (int i = 0; i < selectable.Children.Length; i++)
+            for (var i = 0; i < selectable.Children.Length; i++)
             {
                 if (selectable.Children[i] != null)
                 {

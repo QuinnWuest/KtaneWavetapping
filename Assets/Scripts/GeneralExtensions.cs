@@ -87,7 +87,7 @@ public static class GeneralExtensions
         // Search backwords in the string for a whitespace char
         // starting with the char one after the maximum length
         // (if the next char is a whitespace, the last word fits).
-        for (int i = maxLength; i >= 0; i--)
+        for (var i = maxLength; i >= 0; i--)
         {
             if (char.IsWhiteSpace(str[i]))
                 return str.Substring(0, i).TrimEnd();

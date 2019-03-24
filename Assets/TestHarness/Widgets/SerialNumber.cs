@@ -31,15 +31,15 @@ public class SerialNumber : Widget
 		if (sntype == SerialNumberType.RANDOM_NORMAL)
 		{
 			string str1 = string.Empty;
-			for (int index = 0; index < 2; ++index) str1 = str1 + SerialNumberPossibleCharArray[Random.Range(0, SerialNumberPossibleCharArray.Length)];
+			for (var index = 0; index < 2; ++index) str1 = str1 + SerialNumberPossibleCharArray[Random.Range(0, SerialNumberPossibleCharArray.Length)];
 			string str2 = str1 + (object)Random.Range(0, 10);
-			for (int index = 3; index < 5; ++index) str2 = str2 + SerialNumberPossibleCharArray[Random.Range(0, SerialNumberPossibleCharArray.Length - 10)];
+			for (var index = 3; index < 5; ++index) str2 = str2 + SerialNumberPossibleCharArray[Random.Range(0, SerialNumberPossibleCharArray.Length - 10)];
 			widget.serial = str2 + Random.Range(0, 10);
 		}
 		else if (sntype == SerialNumberType.RANDOM_ANY)
 		{
 			string res = string.Empty;
-			for (int index = 0; index < 6; ++index) res = res + SerialNumberPossibleCharArray[Random.Range(0, SerialNumberPossibleCharArray.Length)];
+			for (var index = 0; index < 6; ++index) res = res + SerialNumberPossibleCharArray[Random.Range(0, SerialNumberPossibleCharArray.Length)];
 			widget.serial = res;
 		}
 		else

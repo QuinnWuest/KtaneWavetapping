@@ -37,7 +37,7 @@ public static class scr_codeExtension {
 	public static string Join<T>(this IEnumerable<T> toJoin, string logSep = " ", int rowLen = 1, int colLen = 1) {
 		var fullLog = new string[rowLen];
 
-		for (int i = 0; i < fullLog.Length; i++) {
+		for (var i = 0; i < fullLog.Length; i++) {
 			fullLog[i] = string.Format("[{0}] {1}\n", i, toJoin.Slice(colLen * i, colLen).Join(logSep));
 		}
 
@@ -54,7 +54,7 @@ public static class scr_codeExtension {
 			throw new ArgumentNullException("toShuff");
 		}
 
-		for (int j = toShuff.Count; j >= 1; j--) {
+		for (var j = toShuff.Count; j >= 1; j--) {
 			var item = Random.Range(0, j);
 
 			if (item < j - 1) {
@@ -169,8 +169,8 @@ public static class scr_codeExtension {
 		var colLen = toArrayOD.GetLength(1);
 		T[] setArrayOD = new T[rowLen * colLen];
 
-		for (int i = 0; i < rowLen; i++) {
-			for (int j = 0; j < colLen; j++) {
+		for (var i = 0; i < rowLen; i++) {
+			for (var j = 0; j < colLen; j++) {
 				setArrayOD[(colLen * i) + j] = toArrayOD[i, j];
 			}
 		}
@@ -189,7 +189,7 @@ public static class scr_codeExtension {
 	public static T[,] ToArray2D<T>(this T[] toArrayTD, int rowLen, int colLen) {
 		T[,] setArrayTD = new T[rowLen, colLen];
 
-		for (int i = 0; i < (rowLen * colLen); i++) {
+		for (var i = 0; i < (rowLen * colLen); i++) {
 			setArrayTD[i / colLen, i % colLen] = (i < toArrayTD.Length) ? toArrayTD[i] : default(T);
 		}
 
