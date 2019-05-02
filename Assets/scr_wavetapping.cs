@@ -52,7 +52,6 @@ public class scr_wavetapping : MonoBehaviour {
     bool beatStage;
 
     bool moduleSolved;
-
     static int moduleIdCounter = 1;
     int moduleId;
 
@@ -71,19 +70,17 @@ public class scr_wavetapping : MonoBehaviour {
         Debug.LogFormat(@"[Wavetapping #{0}] Possible colors are: {1}", moduleId, usedColors.Select(x => colorNames[x]).Join(", "));
         Debug.LogFormat(@"[Wavetapping #{0}] Stage colors are: {1}", moduleId, stageColors.Select(x => colorNames[x]).Join(", "));
 
-        for (var i = 0; i < ColorDisplays.Length; i++) {
+        for (var i = 0; i < ColorDisplays.Length; i++)
             ColorDisplays[i].material.color = (usedColors.Contains(i)) ? "#DDDDDD".Color() : patternColors[0, i];
-        }
 
         serialNumber = BombInfo.GetSerialNumber();
         serialDigits = BombInfo.GetSerialNumberNumbers();
 
-        if ("SRFMU".Count(x => BombInfo.GetSerialNumberLetters().Distinct().Contains(x)) >= 3) {
+        if (BombInfo.GetSerialNumberLetters().Count("SRFMU".Contains) >= 3) {
             Debug.LogFormat(@"[Wavetapping #{0}] Rotating the patterns 180 degrees.", moduleId);
 
-            for (var i = 0; i < colorNames.Length; i++) {
+            for (var i = 0; i < colorNames.Length; i++)
                 patterns[colorNames[i]] = patterns[colorNames[i]].Select(x => x.Reverse()).ToArray();
-            }
         }
 
         GetCorrects();
@@ -106,9 +103,7 @@ public class scr_wavetapping : MonoBehaviour {
                 return false;
             };
 
-            ModuleButtons[i].OnInteractEnded += delegate() {
-                dragging = false;
-            };
+            ModuleButtons[i].OnInteractEnded += delegate() { dragging = false; };
 
             ModuleButtons[i].OnHighlight += delegate() {
                 if (dragging) {
@@ -139,9 +134,8 @@ public class scr_wavetapping : MonoBehaviour {
                 ModuleButtons[i].GetComponent<Renderer>().material.color = patternColors[nowPattern[i].Equals('O').ToInt(), stageColors[nowStage]];
             }
         } else {
-            for (var i = 0; i < ModuleButtons.Length; i++) {
+            for (var i = 0; i < ModuleButtons.Length; i++)
                 ModuleButtons[i].GetComponent<Renderer>().material.color = patternColors[0, stageColors[nowStage]];
-            }
 
             nowPattern = Enumerable.Repeat("X", 121).Join("");
         }
@@ -167,9 +161,8 @@ public class scr_wavetapping : MonoBehaviour {
         for (var i = 0; i < 5; i++) {
             var nowShape = (i.IsEven()) ? shape : Enumerable.Repeat("X", 121).Join("");
 
-            for (var j = 0; j < ModuleButtons.Length; j++) {
+            for (var j = 0; j < ModuleButtons.Length; j++)
                 ModuleButtons[j].GetComponent<Renderer>().material.color = patternColors[(nowShape[j].Equals('O')).ToInt(), stageColors[stage]];
-            }
 
             yield return new WaitForSeconds(0.2f);
         }
@@ -197,9 +190,8 @@ public class scr_wavetapping : MonoBehaviour {
                 shape = Enumerable.Repeat("X", 121).Join("");
             }
 
-            for (var j = 0; j < ModuleButtons.Length; j++) {
+            for (var j = 0; j < ModuleButtons.Length; j++)
                 ModuleButtons[j].GetComponent<Renderer>().material.color = patternColors[(shape[j].Equals('O')).ToInt(), stageColors[nowStage]];
-            }
 
             if (i != flashTimes - 2) {
                 if (i.IsEven()) {
@@ -229,13 +221,7 @@ public class scr_wavetapping : MonoBehaviour {
         switch (checkColor) {
             case "Red": return InRange((NonZero(BombInfo.GetBatteryCount()) * NonZero(BombInfo.GetIndicators().Count())), stage);
             case "Orange": return InRange(((stage + 1) * NonZero(serialDigits.Last())), stage);
-
-            case "Orange-Yellow":
-                if (!serialDigits.Sum().IsEven()) {
-                    return stage;
-                } else {
-                    return 2 - stage;
-                }
+            case "Orange-Yellow": return (!serialDigits.Sum().IsEven()) ? stage : 2 - stage;
 
             case "Chartreuse":
                 var leftCount = unusedMap.GetCol(0).Concat(unusedMap.GetCol(1)).Count(x => x == true);
@@ -254,9 +240,8 @@ public class scr_wavetapping : MonoBehaviour {
                 if (countD == countAA) {
                     return (serialDigits.First().IsEven()).ToInt();
                 } else {
-                    if (stage != 0 && patterns[colorNames[stageColors[stage - 1]]].Length <= 3) {
+                    if (stage != 0 && patterns[colorNames[stageColors[stage - 1]]].Length <= 3)
                         return (countD > countAA).ToInt();
-                    }
 
                     return (countD < countAA).ToInt();
                 }
@@ -320,11 +305,10 @@ public class scr_wavetapping : MonoBehaviour {
             case "Magenta":
                 var charSum = serialNumber.Take(3).Select(x => A1Z26(x)).Sum() * serialNumber.Skip(3).Select(x => A1Z26(x)).Sum();
 
-                if (charSum > 2222) {
+                if (charSum > 2222)
                     patterns["Magenta"] = patterns["Magenta"].Select(x => Rotate(x)).ToArray();
-                }
 
-                return InRange(NonZero(charSum), stage);
+                return InRange(NonZero(charSum, 8), stage);
 
             case "Pink":
                 var digitsNum = int.Parse(serialDigits.Join(""));
@@ -345,47 +329,37 @@ public class scr_wavetapping : MonoBehaviour {
         return 0;
     }
 
-    int NonZero(int checking, int amount = 1) {
-        return (checking > 0) ? checking : amount;
-    }
+    int A1Z26(char nowChar) { return (char.IsDigit(nowChar)) ? int.Parse(nowChar.ToString()) : (nowChar - 'A') + 1; }
+    int NonZero(int checking, int amount = 1) { return (checking > 0) ? checking : amount; }
 
     int InRange(int ranging, int stage) {
         var length = patterns[colorNames[stageColors[stage]]].Length;
 
-        while (!ranging.IsInRange(0, length)) {
+        while (!ranging.IsInRange(0, length))
             ranging -= length;
-        }
 
         return (ranging > 0) ? ranging - 1 : ranging;
     }
 
     int InRange(int ranging, int length, int placeholder = 0) {
-        while (!ranging.IsInRange(0, length)) {
+        while (!ranging.IsInRange(0, length))
             ranging -= length;
-        }
 
         return (ranging > 0) ? ranging - 1 : ranging;
-    }
-
-    int A1Z26(char nowChar) {
-        return (char.IsDigit(nowChar)) ? int.Parse(nowChar.ToString()) : (nowChar - 'A') + 1;
-    }
+    } 
 
     void LogPatterns(string pattern) {
         pattern = pattern.Replace('O', '0');
 
-        for (var i = 0; i < 11; i++) {
+        for (var i = 0; i < 11; i++)
             Debug.LogFormat(@"[Wavetapping #{0}] {1}", moduleId, pattern.Skip(11 * i).Take(11).Join(""));
-        }
     }
 
     void OnSubmitPress() {
         BombAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
         ModuleSelect.AddInteractionPunch(0.5f);
 
-        if (moduleSolved || beatStage) {
-            return;
-        }
+        if (moduleSolved || beatStage) return;
 
         var prevStage = nowStage;
 
@@ -424,9 +398,7 @@ public class scr_wavetapping : MonoBehaviour {
     }
 
     void OnButtonPress(int buttonPressed) {
-        if (beatStage) {
-            return;
-        }
+        if (beatStage) return;
 
         var compRend = ModuleButtons[buttonPressed].GetComponent<Renderer>();
         compRend.material.color = patternColors[(compRend.material.color.Equals(patternColors[0, stageColors[nowStage]])).ToInt(), stageColors[nowStage]];
