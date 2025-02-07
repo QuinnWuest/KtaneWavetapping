@@ -48,6 +48,7 @@ public class scr_wavetapping : MonoBehaviour {
     string serialNumber = "";
     IEnumerable<int> serialDigits;
 
+    string dragStateVal;
     bool dragging;
     bool beatStage;
 
@@ -97,9 +98,9 @@ public class scr_wavetapping : MonoBehaviour {
             var j = i;
 
             ModuleButtons[i].OnInteract += delegate() {
+                dragStateVal = nowPattern[j] == 'O' ? "X" : "O";
                 OnButtonPress(j);
                 dragging = true;
-
                 return false;
             };
 
@@ -401,10 +402,9 @@ public class scr_wavetapping : MonoBehaviour {
         if (beatStage) return;
 
         var compRend = ModuleButtons[buttonPressed].GetComponent<Renderer>();
-        compRend.material.color = patternColors[(compRend.material.color.Equals(patternColors[0, stageColors[nowStage]])).ToInt(), stageColors[nowStage]];
-        var addStr = (nowPattern[buttonPressed].Equals('O')) ? "X" : "O";
+        compRend.material.color = patternColors[dragStateVal == "X" ? 0 : 1, stageColors[nowStage]];
         nowPattern = nowPattern.Remove(buttonPressed, 1);
-        nowPattern = nowPattern.Insert(buttonPressed, addStr);
+        nowPattern = nowPattern.Insert(buttonPressed, dragStateVal);
     }
 
 #pragma warning disable 414
