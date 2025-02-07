@@ -99,6 +99,7 @@ public class scr_wavetapping : MonoBehaviour {
 
             ModuleButtons[i].OnInteract += delegate() {
                 dragStateVal = nowPattern[j] == 'O' ? "X" : "O";
+                ModuleButtons[j].AddInteractionPunch(0.2f);
                 OnButtonPress(j);
                 dragging = true;
                 return false;
@@ -357,8 +358,8 @@ public class scr_wavetapping : MonoBehaviour {
     }
 
     void OnSubmitPress() {
-        BombAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
-        ModuleSelect.AddInteractionPunch(0.5f);
+        BombAudio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, SubmitButton.transform);
+        SubmitButton.AddInteractionPunch(0.5f);
 
         if (moduleSolved || beatStage) return;
 
